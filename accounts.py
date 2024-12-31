@@ -1,5 +1,9 @@
 import psycopg2
 from psycopg2 import sql
+from flask import Flask, jsonify, request
+
+
+
 
 # connect to database
 DB_NAME = "financial_tracker"
@@ -40,7 +44,7 @@ def insert_account(name, account_type, balance):
         INSERT INTO accounts (name, type, balance)
         VALUES (%s, %s, %s) RETURNING account_id;
         """
-        cursor.execute(query, (name, type, balance))
+        cursor.execute(query, (name, account_type, balance))
         account_id = cursor.fetchone()[0]
         connection.commit()
         print(f"Account ID added: {account_id}")
@@ -51,7 +55,7 @@ def insert_account(name, account_type, balance):
         connection.close()
 
 # Example use
-if __name__ == "__name__":
+if __name__ == "__main__":
     insert_account("My Checking Account", "Checking", 1500.00)
 
 def fetch_accounts():
@@ -75,12 +79,8 @@ def fetch_accounts():
         connection.close()
 
 # Example use
-if __name__ == "__name__":
+if __name__ == "__main__":
     fetch_accounts()
-
-
-from flask import Flask, jsonify, request
-from your_database_module import insert_account, fetch_accounts
 
 app = Flask(__name__)
 
@@ -98,5 +98,5 @@ def add_account():
     insert_account(name, account_type, balance)
     return jsonify({"message": "Account added successfully!"}), 201
 
-if __name__ == "__name__":
+if __name__ == "__main__":
     app.run(debug=True)
