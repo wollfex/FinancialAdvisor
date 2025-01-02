@@ -3,8 +3,6 @@ from psycopg2 import sql
 from flask import Flask, jsonify, request
 
 
-
-
 # connect to database
 DB_NAME = "financial_tracker"
 DB_USER = "postgres"
@@ -81,22 +79,3 @@ def fetch_accounts():
 # Example use
 if __name__ == "__main__":
     fetch_accounts()
-
-app = Flask(__name__)
-
-@app.route("/accounts", methods=["GET"])
-def get_accounts():
-    accounts = fetch_accounts()
-    return jsonify(accounts)
-
-@app.route("/accounts", methods=["POST"])
-def add_account():
-    data = request.json
-    name = data["name"]
-    account_type = data["type"]
-    balance = data["balance"]
-    insert_account(name, account_type, balance)
-    return jsonify({"message": "Account added successfully!"}), 201
-
-if __name__ == "__main__":
-    app.run(debug=True)
